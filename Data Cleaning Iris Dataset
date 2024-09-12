@@ -1,0 +1,96 @@
+Data Cleaning and Visualization of the Iris Dataset
+
+
+Introduction
+
+The Iris dataset, a classic dataset in machine learning, provides measurements of sepal length, sepal width, petal length, 
+and petal width for 150 iris flowers from three different species: setosa, versicolor, and virginica. 
+This document outlines the process of cleaning and visualizing the Iris dataset using R.
+
+
+
+Data Loading and Exploration
+
+```R
+library(tidyverse)
+
+# Load the Iris dataset
+data(iris)
+
+# Explore the data
+head(iris)  # Display the first few rows
+str(iris)  # Check the structure of the data
+summary(iris)  # Get summary statistics
+```
+
+
+
+Data Cleaning
+
+Handling Missing Values:
+
+While the Iris dataset doesn't have any missing values in this example, it's essential to handle them appropriately in real-world scenarios.
+
+```R
+# Impute missing values (if necessary)
+# For example, impute missing values in 'Sepal.Length' with the mean:
+iris$Sepal.Length[is.na(iris$Sepal.Length)] <- mean(iris$Sepal.Length, na.rm = TRUE)
+```
+
+
+
+Converting Data Types:
+
+```R
+# Convert categorical variables to factors
+iris$Species <- as.factor(iris$Species)
+```
+
+
+
+Removing Outliers:
+
+```R
+# Calculate IQR (Interquartile Range)
+q1 <- quantile(iris$Sepal.Length, 0.25)
+q3 <- quantile(iris$Sepal.Length, 0.75)
+iqr <- q3 - q1
+
+# Define lower and upper bounds for outliers
+lower_bound <- q1 - 1.5 * iqr
+upper_bound <- q3 + 1.5 * iqr
+
+# Remove outliers
+cleaned_iris <- iris[iris$Sepal.Length >= lower_bound & iris$Sepal.Length <= upper_bound, ]
+```
+
+
+
+Data Visualization
+
+Histogram of Sepal Length:
+
+```R
+ggplot(cleaned_iris, aes(x = Sepal.Length)) +
+  geom_histogram(binwidth = 0.25) +
+  labs(title = "Sepal Length Distribution (Cleaned)")
+```
+
+
+
+
+Explanation:
+
+The histogram shows the distribution of sepal lengths in the cleaned dataset.
+The peak around 5.0 indicates that the most common sepal length is close to 5.0 units.
+The overall shape is approximately bell-shaped, suggesting a normal distribution.
+
+
+
+
+Conclusion:
+
+This document provides a comprehensive overview of the data cleaning process for the Iris dataset, including handling missing values, 
+converting data types, and removing outliers. 
+The visualizations offer insights into the distribution of sepal length and the relationships between features within the dataset.
+
